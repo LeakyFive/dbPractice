@@ -2,21 +2,27 @@
 
 require_once "dbClass.php";
 
-$connection = new ConnectDB();
+$conn = new ConnectDB();
+$operationType = $_POST['action'];
 
-if (@$_POST['action'] == 'update') {
-	$data = json_decode($_POST['entity'], true);
+if ($operationType == 'update') {
 	$table = $_POST['table'];
 	$id = $_POST['id'];
-	$connection->update($table, $data, $id);
+	$types = $_POST['types'];
+	$fields = $_POST['fields'];
+	$values = $_POST['values'];
+	$conn->makePreparedQuery($table, $operationType, $id, $types, $field, $values);
 }
-if (@$_POST['action'] == 'delete') {
+if ($operationType == 'insert') {
 	$table = $_POST['table'];
 	$id = $_POST['id'];
-	$connection->delete($table, $id);
+	$types = $_POST['types'];
+	$fields = $_POST['fields'];
+	$values = $_POST['values'];
+	$conn->makePreparedQuery(($table, $operationType, $id, $types, $field, $values);
 }
-if (@$_POST['action'] == 'add') {
+if ($operationType == 'delete') {
 	$table = $_POST['table'];
-	$data = $_POST;
-	$connection->add($table, $data);
+	$id = $_POST['id'];
+	$conn->makePreparedQuery($table, $id);
 }
