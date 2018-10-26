@@ -22,39 +22,43 @@ class DBConnection
 		$this->conn->set_charset($opt['charset']);
 	}
 
-	public function makeQuery($myQuery)
+	public function makePreparedQuery($table, $operationType, $rowId = "", $valuesTypes = "", $fields = "", $values = "")
 	{
-		$q = $this->connect->query($myQuery);
-		if($q) return $q;
-		else return null;
+		$placeholders = [];
+		for ($i=0; $i < sizeof($fields); $i++)
+		{ 
+			array_push($placeholders, '?')
+		}
+		$impFields = implode(",", $fields);
+		$impValues = implode(",", $placeholders);
+		if ($operationType = 'insert')
+		{ 
+			$stmt = $this->conn->prepare("INSERT INTO $table VALUES ($impFields) ($impValues)");
+		}
+		if ($operationType = 'update')
+		{
+			$query = "UPDATE $table SET ";
+			$valuesAssoc = array_fill_keys($fields, $values);
+			foreach ($valuesAssoc as $key => $value) {
+				if ($key != 'id')
+				{
+					$query .= "$value=?,";
+				}
+			}
+			$query = substr($query, 0, -1);
+			$query .= " WHERE id=$rowId";
+			$stmt = $this->conn->prepare($query);
+		}
+		if ($operationType = 'delete') 
+		{ 
+			$stmt = $this->conn->query("DELETE FROM $table WHERE id=$rowId");
+		}
+		$stmt->bind_param($valuesTypes, ...$values);
+		$stmt->execute();
 	}
-
+	
 	public function fetch($result)
 	{
 		return $result->fetch_all($mode = self::FETCH_MODE)
 	}
-
-	public function add($table, $data)
-	{
-
-	}
-
-	public function update($table, $data, $id)
-	{
-
-	}
-
-	public function delete($table, $id)
-	{
-
-	}
-}
-
-
-$object = new ConnectDB();
-$res=$object->selectFromTwoTables("city", "region", "region_id");
-$mydata=$res->fetch_all(MYSQLI_ASSOC);
-for($i=0,$count = sizeof($mydata);$i<$count;$i++)
-{
-    echo "<div {$mydata[$i]['region_id']}</div>";
 }
