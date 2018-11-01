@@ -11,14 +11,15 @@ class DBConnection
 		'host' => 'localhost', //на локальном сервере адрес хоста - localhost
 		'user' => 'root', //пользователь в БД (root по умолчанию)
 		'pass' => '', //пароль пользователя БД (по умолчанию у root'a не установлен)
-		'db' => 'dbName', //название вашей БД в phpMyAdmin (MySQL)
+		'db' => 'example', //название вашей БД в phpMyAdmin (MySQL)
 		'charset' => 'utf8', //используемая в БД кодировка символом
 	];
 
-	const $FETCH_MODE = MYSQLI_ASSOC; //константа, которая хранит вид массива, в который попадут данные из результата запроса к MySQL
+	const FETCH_MODE = MYSQLI_ASSOC; //константа, которая хранит вид массива, в который попадут данные из результата запроса к MySQL
 
 	public function __construct() //конструктор класса, вызывается при создании экземпляра класса
 	{
+		$opt = [];
 		$opt = array_merge($this->defaults, $opt); //опции записанные в поле класса defaults записываются в $opt для удобства работы
 		$this->conn = new mysqli($opt['host'], $opt['user'], $opt['pass'], $opt['db']); //в поле класса $conn записывается подключение к БД и хранится там
 		if (!$this->conn) exit('Lost DB connection'); //если подключение false, то происходит выход из скрипта с ошибкой
@@ -42,7 +43,7 @@ class DBConnection
 		$placeholders = []; //создаём массив, где будем хранить знаки вопроса, количество которых зависит от количества полей (смотрите статью про то, как выглядит подготовленный запрос)
 		for ($i=0; $i < sizeof($fields); $i++) //цикл для записи знаков вопроса в $placeholders
 		{ 
-			array_push($placeholders, '?')
+			array_push($placeholders, '?');
 		}
 		$impPlaceholders = implode(",", $placeholders); //формируем строку из знаков вопроса разделённых запятой
 		$impFields = implode(",", $fields); //формируем строку из полей разделённых запятой
@@ -76,6 +77,6 @@ class DBConnection
 	
 	public function fetch($result) //данная функция позволяет преобразовать результат полученный из MySQL в ассоциативный массив, принимает на вход результат запроса к MySQL
 	{
-		mysqli_fetch_all($mode = self::FETCH_MODE) 
+		return mysqli_fetch_all($result, $mode = self::FETCH_MODE);
 	}
 }

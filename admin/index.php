@@ -41,26 +41,26 @@ $connect = new DBConnection(); //создаём экземпляр класса 
 			<table class="table table-hover my-3">
 		  		<thead class="thead-light">
 			    	<tr>
-			        	<th scope="col">#</th>
-			      	 	<th scope="col">First</th>
-			      	 	<th scope="col">Last</th>
-			      		<th scope="col">Handle</th>
-			      		<th scope="col">Actions</th>
+			        	<th scope="col">id</th>
+			      	 	<th scope="col">Имя</th>
+			      	 	<th scope="col">Логин</th>
+			      		<th scope="col">Пароль</th>
+			      		<th scope="col">Действия</th>
 			    	</tr>
 		  		</thead>
 			  	<tbody>
 			  	<?php
-                  $query = "SELECT * FROM table"; //записываем запрос на выборку данных
+                  $query = "SELECT * FROM users"; //записываем запрос на выборку данных
                   $queryResult = $connect->makeUnpreparedQuery($query); //выполняем запрос записываем ответ MySQL в $queryResult
                   $data = $connect->fetch($queryResult); //данные полученные из MySQL преабоазовываем в ассоциативный массив
                   for($i = 0, $count = sizeof($data); $i < $count; $i++) // выводим данные в виде строк HTML-таблицы 
                   {
                   	echo "
                   	<tr>
-			      		<th scope='row'>{$data['id']}</th>
-			      		<td><input class='form-control' name='_название поля из БД_' disabled type='text' value='{$data['_название поля из БД_']}'></td>
-			      		<td><input class='form-control' name='_название поля_' disabled type='text' value='{$data['_название поля из БД_']}'></td>
-			      		<td><input class='form-control' name='_название поля_' disabled type='text' value='{$data['_название поля из БД_']}'></td>
+			      		<th scope='row'>{$data[$i]['id']}</th>
+			      		<td><input class='form-control' name='name' disabled type='text' value='{$data[$i]['name']}'></td>
+			      		<td><input class='form-control' name='login' disabled type='text' value='{$data[$i]['login']}'></td>
+			      		<td><input class='form-control' name='password' disabled type='text' value='{$data[$i]['password']}'></td>
 			      		<td><div class='icons-ed-del'><i data-opType='update' class='btn btn-light mr-2 far fa-edit fa-lg' style='color: #339af0;'></i><i data-opType='delete' class='btn btn-light far fa-trash-alt fa-lg' style='color: #ff6b6b;'></i></div>
 			      		</td>
 			    	</tr>
