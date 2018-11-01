@@ -49,25 +49,26 @@ class DBConnection
 		$impFields = implode(",", $fields); //формируем строку из полей разделённых запятой
 		$impValues = implode(",", $placeholders); //формируем строку из значений полей разделённых запятой
 		// далее в зависимости от типа операции выполняются определенные действия
-		if ($operationType = 'insert')
-		{ 
-			$stmt = $this->conn->prepare("INSERT INTO $table VALUES ($impFields) ($impPlaceholders)"); //подготавливается запрос
+		if ($operationType == 'insert')
+		{
+			$query = "INSERT INTO $table ($impFields) VALUES ($impPlaceholders)";
+			$stmt = $this->conn->prepare($query); //подготавливается запроc
 		}
-		if ($operationType = 'update')
+		if ($operationType == 'update')
 		{
 			$query = "UPDATE $table SET ";
-			$valuesAssoc = array_fill_keys($fields, $values); //создаётся ассоциативный массив вида поля => значения
+			$valuesAssoc = array_combine($fields, $values); //создаётся ассоциативный массив вида поля => значения
 			foreach ($valuesAssoc as $key => $value) {
 				if ($key != 'id')
 				{
-					$query .= "$value=?,"; //формируется строка запроса
+					$query .= "$key=?,"; //формируется строка запроса
 				}
 			}
 			$query = substr($query, 0, -1); //убирается лишняя запятая в конце
-			$query .= " WHERE id=$impPlaceholders"; //добавляется условие определяющее какую строку мы обновляем
+			$query .= " WHERE id=?"; //добавляется условие определяющее какую строку мы обновляем
 			$stmt = $this->conn->prepare($query); //запрос подготавливается после того, как был сформирован
 		}
-		if ($operationType = 'delete') 
+		if ($operationType == 'delete') 
 		{ 
 			$stmt = $this->conn->query("DELETE FROM $table WHERE id=?");
 		}
