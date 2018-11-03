@@ -52,3 +52,30 @@ $(document).on('click', '.button-add', function(e) {
 		}
 	})
 });
+
+$(document).on('click', '.delete-button', function() {
+	let form = $(this).parent().parent().parent();
+	let inputs = form.find('input');
+	let values = [];
+	let types = 'i';
+	let action = 'delete';
+	let table = 'users';
+	values.push($(this).attr('data-id');
+	$.ajax({
+		url: '../php/CRUD.php',
+		type: 'POST',
+		data: {
+			table: table,
+			action: action,
+			values: JSON.stringify(values),
+			types: types,
+		},
+		success: function(response) {
+			console.log(response);
+			form.remove();
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	})
+});

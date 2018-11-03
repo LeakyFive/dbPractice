@@ -19,8 +19,8 @@ if ($operationType == 'insert') { //собираем данные для вып�
 	$values = json_decode($_POST['values']);
 	$conn->makePreparedQuery($table, $operationType, null, $types, $fields, $values);
 }
-// if ($operationType == 'delete') { //собираем данные для выполнения delete
-// 	$table = $_POST['table'];
-// 	$id = $_POST['id'];
-// 	$conn->makePreparedQuery($table, $id);
-// }
+if ($operationType == 'delete') { //собираем данные для выполнения delete
+	$table = $_POST['table'];
+	$values = $_POST['values'];
+	$conn->makePreparedQuery($table, $operationType, null, $types, null, $values);
+}
