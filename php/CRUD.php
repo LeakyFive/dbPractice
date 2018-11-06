@@ -21,6 +21,7 @@ if ($operationType == 'insert') { //собираем данные для вып�
 }
 if ($operationType == 'delete') { //собираем данные для выполнения delete
 	$table = $_POST['table'];
-	$values = $_POST['values'];
-	$conn->makePreparedQuery($table, $operationType, null, $types, null, $values);
+	$id = $_POST['id'];
+	$types = $_POST['types'];
+	$conn->makePreparedQuery($table, $operationType, $id, $types, null, null);
 }

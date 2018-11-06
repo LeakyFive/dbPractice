@@ -74,7 +74,7 @@ $connect = new DBConnection(); //создаём экземпляр класса 
 			      		<td><input class='form-control' name='name' disabled type='text' value='{$data[$i]['name']}'></td>
 			      		<td><input class='form-control' name='login' disabled type='text' value='{$data[$i]['login']}'></td>
 			      		<td><input class='form-control' name='password' disabled type='text' value='{$data[$i]['password']}'></td>
-			      		<td><div class='icons-ed-del'><i class='edit-button btn btn-light mr-2 far fa-edit fa-lg' style='color: #339af0;'></i><i data-opType='delete' class='delete-button btn btn-light far fa-trash-alt fa-lg' style='color: #ff6b6b;'></i></div>
+			      		<td><div class='icons-ed-del'><i class='edit-button btn btn-light mr-2 far fa-edit fa-lg' style='color: #339af0;'></i><i data-opType='delete' data-id={$data[$i]['id']} class='delete-button btn btn-light far fa-trash-alt fa-lg' style='color: #ff6b6b;'></i></div>
 			      		<div class='icons-сonf-canc' style='display: none;'><i data-opType='update' class='btn btn-light mr-2 fas fa-check fa-lg' style='color: #51cf66;'></i><i class='cancel-button btn btn-light fas fa-times fa-lg' style='color: #ff6b6b;'></i></div>
 			      		</td>
 			    	</tr>

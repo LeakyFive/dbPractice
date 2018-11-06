@@ -45,14 +45,15 @@ class DBConnection
 		{ 
 			array_push($placeholders, '?');
 		}
-		$impPlaceholders = implode(",", $placeholders); //формируем строку из знаков вопроса разделённых запятой
-		$impFields = implode(",", $fields); //формируем строку из полей разделённых запятой
+		@$impPlaceholders = implode(",", $placeholders); //формируем строку из знаков вопроса разделённых запятой
+		@$impFields = implode(",", $fields); //формируем строку из полей разделённых запятой
 		$impValues = implode(",", $placeholders); //формируем строку из значений полей разделённых запятой
 		// далее в зависимости от типа операции выполняются определенные действия
 		if ($operationType == 'insert')
 		{
 			$query = "INSERT INTO $table ($impFields) VALUES ($impPlaceholders)";
 			$stmt = $this->conn->prepare($query); //подготавливается запроc
+			$stmt->bind_param($valuesTypes, ...$values);
 		}
 		if ($operationType == 'update')
 		{
@@ -67,12 +68,14 @@ class DBConnection
 			$query = substr($query, 0, -1); //убирается лишняя запятая в конце
 			$query .= " WHERE id=?"; //добавляется условие определяющее какую строку мы обновляем
 			$stmt = $this->conn->prepare($query); //запрос подготавливается после того, как был сформирован
+			$stmt->bind_param($valuesTypes, ...$values);
 		}
 		if ($operationType == 'delete') 
 		{ 
-			$stmt = $this->conn->query("DELETE FROM $table WHERE id=?");
+			$stmt = $this->conn->prepare("DELETE FROM $table WHERE id=?");
+			$stmt->bind_param($valuesTypes, $rowId);
 		}
-		$stmt->bind_param($valuesTypes, ...$values); //bind_param привязывает значения полей к параметрам подготавливаемого запроса
+		 //bind_param привязывает значения полей к параметрам подготавливаемого запроса
 		$stmt->execute(); //запрос выполняется
 	}
 	

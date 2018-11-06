@@ -56,18 +56,17 @@ $(document).on('click', '.button-add', function(e) {
 $(document).on('click', '.delete-button', function() {
 	let form = $(this).parent().parent().parent();
 	let inputs = form.find('input');
-	let values = [];
+	let id = $(this).attr('data-id');
 	let types = 'i';
 	let action = 'delete';
 	let table = 'users';
-	values.push($(this).attr('data-id');
 	$.ajax({
 		url: '../php/CRUD.php',
 		type: 'POST',
 		data: {
 			table: table,
 			action: action,
-			values: JSON.stringify(values),
+			id: id,
 			types: types,
 		},
 		success: function(response) {
